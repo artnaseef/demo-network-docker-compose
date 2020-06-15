@@ -1,0 +1,26 @@
+version: '2.0'
+
+networks:
+    nw01:
+
+services:
+    back-end:
+        build:
+            context: .
+            dockerfile: Dockerfile.nc
+        entrypoint: sh -c "echo STARTING; date | nc -l -N 0.0.0.0 9999; echo TERMINATING"
+        networks:
+            nw01:
+                aliases:
+                    - be01.modusbox.com
+
+    front-end:
+        build: 
+            context: .
+            dockerfile: Dockerfile.nc
+#        entrypoint: sh -c "nc -d back-end 9999"
+        entrypoint: sh -c "nc -d be01.modusbox.com 9999"
+        networks:
+            nw01:
+                aliases:
+                    - fe01.modusbox.com
